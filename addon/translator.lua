@@ -1,13 +1,6 @@
 Translator = {}
 function Translator:new(lang_uniq_symbols)
     local private = {}
-        private.numSymbolsUsedToEncode = 3
-        private.encoding_alphabet = lang_uniq_symbols
-        private.messageAlphabet = private:setup_message_alphabet()
-        private.head = private:get_prefix()
-        private.tail = private:get_postfix()
-        private.encoding_table = private:__setup_encoding_table()
-        private.decoding_table = private.__setup_decoding_table()
 
         function private:encoding_alphabet_from_msg(message)
             --[[
@@ -136,12 +129,12 @@ function Translator:new(lang_uniq_symbols)
             Generate encoding dictionary
             :return: dictionary with "input char": "encoded representation" items
             --]]
-            local encoding_table
+            local encoding_table = {}
 
             for i, a in ipairs(private.encoding_alphabet) do
                 for _, b in ipairs(private.encoding_alphabet) do
                     for _, c in ipairs(private.encoding_alphabet) do
-                        encoding_table.insert(tostring(a)..tostring(b)..tostring(c))
+                        table.insert(encoding_table, #encoding_table+1, tostring(a)..tostring(b)..tostring(c))
                     end
                 end
             end
@@ -154,13 +147,29 @@ function Translator:new(lang_uniq_symbols)
             :return: dictionary with "encoded representation": "input char" items
             --]]
 
-            local decoding_table
+            local decoding_table = {}
 
             for key, val in pairs(private.encoding_table) do
                 decoding_table[val] = key
             end
             return decoding_table
         end
+
+        function private:str_to_table(str)
+            local t = {}
+            for i = 1, #str do
+                t[i] = str:sub(i, i)
+            end
+            return t
+        end
+
+        private.numSymbolsUsedToEncode = 3
+        private.encoding_alphabet = lang_uniq_symbols
+        private.messageAlphabet = private:setup_message_alphabet()
+        private.head = private:get_prefix()
+        private.tail = private:get_postfix()
+        private.encoding_table = private:setup_encoding_table()
+        private.decoding_table = private.setup_decoding_table()
 
         local public = {}
         function public:encode(message)
@@ -174,12 +183,13 @@ function Translator:new(lang_uniq_symbols)
             :param message: input message
             :return: encoded message
             --]]
+            local message = private:str_to_table(message)
             local encoded_data = {}
             encoded_data = private:array_concat(encoded_data, private.head)
             encoded_data = private:array_concat(encoded_data, private.encoding_alphabet)
             for _, val in ipairs(message) do
                 local encoded_char = private.encoding_table[val]
-                private:array_concat(encoded_data, {encoded_char})
+                table.insert(encoded_data, #encoded_data+1, encoded_char)
             end
             encoded_data = private:array_concat(encoded_data, private.tail)
             local encoded_string = table.concat(encoded_data, ' ')
@@ -222,3 +232,8 @@ function Translator:new(lang_uniq_symbols)
     setmetatable(public,self)
     self.__index = self; return public
 end
+
+
+local test = Translator:new({'1', '2', '3', 'ц', '0', 'й'})
+local encoded = test:encode("DUDE")
+print(encoded)

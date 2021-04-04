@@ -1,4 +1,4 @@
 languages = {
-    Common = "123ц0й",
-    Orcish = "12360й",
+    common = "123ц0й",
+    orcish = "12360й",
 }
