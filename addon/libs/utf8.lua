@@ -236,7 +236,7 @@ if not string.utf8sub then
 end
 
 -- replace UTF-8 characters based on a mapping table
-local function utf8replace(s, mapping)
+function utf8replace(s, mapping)
 	-- argument checking
 	if type(s) ~= "string" then
 		error("bad argument #1 to 'utf8replace' (string expected, got ".. type(s).. ")")
