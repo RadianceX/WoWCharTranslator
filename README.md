@@ -1,4 +1,4 @@
-# WoWCharTranslator
+# WoWTranslator
 ## What is this?
 This WoW addon will solve the problem with cross-faction communication.
 
