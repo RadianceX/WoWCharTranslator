@@ -1,8 +1,12 @@
 ## Interface: 30300
-## Title: |cFF00AAFFTranslate
+## Title: |cFF00AAFFTranslateMate
 ## Author: RadianceX
 ## Version: 1.0
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
-translator.lua
+
+init.lua
+libs\utf8\utf8.lua
 languages.lua
+backend.lua
+tsmate.lua
